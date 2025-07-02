@@ -5,7 +5,6 @@ import TABS, { TABS_KEYS } from "../data/tabs";
 function MainContent() {
     const ref = React.useRef();
     const initedRef = React.useRef(false);
-    const sizesRef = React.useRef([]);
     const [activeTab, setActiveTab] = React.useState("");
     const [hasRightScroll, setHasRightScroll] = React.useState(false);
 
@@ -23,22 +22,15 @@ function MainContent() {
     };
 
     React.useEffect(() => {
-        sizesRef.current = [];
-    }, [activeTab]);
-
-    const onSize = (size) => {
-        sizesRef.current = [...sizesRef.current, size];
-    };
-
-    React.useEffect(() => {
-        const sumWidth = sizesRef.current.reduce(
-            (acc, item) => acc + item.width,
-            0
+        const scroller = ref.current.querySelector(
+            ".section__panel:not(.section__panel_hidden)"
         );
-
-        const newHasRightScroll = sumWidth > ref.current.offsetWidth;
-        if (newHasRightScroll !== hasRightScroll) {
-            setHasRightScroll(newHasRightScroll);
+        if (scroller) {
+            const newHasRightScroll =
+                scroller.scrollWidth > ref.current.offsetWidth;
+            if (newHasRightScroll !== hasRightScroll) {
+                setHasRightScroll(newHasRightScroll);
+            }
         }
     });
 
@@ -210,7 +202,7 @@ function MainContent() {
                     >
                         <ul className="section__panel-list">
                             {TABS[activeTab]?.items.map((item, index) => (
-                                <Event key={index} {...item} onSize={onSize} />
+                                <Event key={index} {...item} />
                             ))}
                         </ul>
                     </div>
