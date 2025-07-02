@@ -13,7 +13,42 @@
         />
     </head>
     <body>
+        <header class="header">
+            <a href="/" class="header__logo" aria-label="Яндекс.Дом"></a>
+            <button
+                id="header-menu-btn"
+                class="header__menu"
+                aria-expanded="false"
+                type="button"
+            >
+                <span
+                    id="header-menu-text"
+                    class="header__menu-text a11y-hidden"
+                >
+                    Открыть меню
+                </span>
+            </button>
+            <ul id="header-links" class="header__links">
+                <li class="header__item">
+                    <a
+                        class="header__link header__link_current"
+                        href="/"
+                        aria-current="page"
+                    >
+                        Сводка
+                    </a>
+                </li>
+                <li class="header__item">
+                    <a class="header__link" href="/devices"> Устройства </a>
+                </li>
+                <li class="header__item">
+                    <a class="header__link" href="/scripts"> Сценарии </a>
+                </li>
+            </ul>
+        </header>
+
         <div id="root"></div>
+
         <footer class="footer">
             <ul class="footer__list">
                 <li class="footer__item">
@@ -33,5 +68,30 @@
             <div class="footer__copyright">© 1997–2023 ООО «Яндекс»</div>
         </footer>
         <script type="module" src="/src/main.jsx"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const menuBtn = document.getElementById("header-menu-btn");
+                const menuText = document.getElementById("header-menu-text");
+                const links = document.getElementById("header-links");
+                let expanded = false;
+                let toggled = false;
+
+                menuBtn.addEventListener("click", function () {
+                    if (!toggled) {
+                        toggled = true;
+                        links.classList.add("header__links-toggled");
+                    }
+                    expanded = !expanded;
+                    menuBtn.setAttribute(
+                        "aria-expanded",
+                        expanded ? "true" : "false"
+                    );
+                    links.classList.toggle("header__links_opened", expanded);
+                    menuText.textContent = expanded
+                        ? "Закрыть меню"
+                        : "Открыть меню";
+                });
+            });
+        </script>
     </body>
 </html>
