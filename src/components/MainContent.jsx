@@ -31,7 +31,10 @@ function MainContent() {
     };
 
     React.useEffect(() => {
-        const sumWidth = sizesRef.reduce((acc, item) => acc + item.width, 0);
+        const sumWidth = sizesRef.current.reduce(
+            (acc, item) => acc + item.width,
+            0
+        );
 
         const newHasRightScroll = sumWidth > ref.current.offsetWidth;
         if (newHasRightScroll !== hasRightScroll) {
