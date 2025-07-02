@@ -5,6 +5,7 @@ import TABS, { TABS_KEYS } from "../data/tabs";
 function MainContent() {
     const ref = React.useRef();
     const initedRef = React.useRef(false);
+    const sizesRef = React.useRef([]);
     const [activeTab, setActiveTab] = React.useState("");
     const [hasRightScroll, setHasRightScroll] = React.useState(false);
 
@@ -21,13 +22,16 @@ function MainContent() {
         setActiveTab(event.target.value);
     };
 
-    let sizes = [];
+    React.useEffect(() => {
+        sizesRef.current = [];
+    }, [activeTab]);
+
     const onSize = (size) => {
-        sizes = [...sizes, size];
+        sizesRef.current = [...sizesRef.current, size];
     };
 
     React.useEffect(() => {
-        const sumWidth = sizes.reduce((acc, item) => acc + item.width, 0);
+        const sumWidth = sizesRef.reduce((acc, item) => acc + item.width, 0);
 
         const newHasRightScroll = sumWidth > ref.current.offsetWidth;
         if (newHasRightScroll !== hasRightScroll) {
