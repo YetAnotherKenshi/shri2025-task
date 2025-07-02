@@ -12,7 +12,7 @@ function MainContent() {
         if (!activeTab && !initedRef.current) {
             initedRef.current = true;
             setActiveTab(
-                new URLSearchParams(location.search).get("tab") || "all"
+                new URLSearchParams(location.search).get("tab") || "hall"
             );
         }
     });
