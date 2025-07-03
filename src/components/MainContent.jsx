@@ -1,41 +1,37 @@
-import React from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Event from './Event';
 import TABS, { TABS_KEYS } from '../data/tabs';
 
 function MainContent() {
-  const ref = React.useRef();
-  const [activeTab, setActiveTab] = React.useState(
+  const wrapperRef = useRef();
+  const scrollerRef = useRef();
+  const [activeTab, setActiveTab] = useState(
     () => new URLSearchParams(location.search).get('tab') || 'hall',
   );
-  const [hasRightScroll, setHasRightScroll] = React.useState(false);
+  const [hasRightScroll, setHasRightScroll] = useState(false);
 
-  const onSelectInput = (event) => {
+  const onSelectInput = useCallback((event) => {
     setActiveTab(event.target.value);
-  };
+  }, []);
 
-  React.useEffect(() => {
-    const scroller = ref.current.querySelector(
-      '.section__panel:not(.section__panel_hidden)',
-    );
-    if (scroller) {
-      const newHasRightScroll = scroller.scrollWidth > ref.current.offsetWidth;
+  const onArrowClick = useCallback(() => {
+    if (scrollerRef.current) {
+      scrollerRef.current.scrollTo({
+        left: scrollerRef.current.scrollLeft + 400,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (scrollerRef.current && wrapperRef.current) {
+      const newHasRightScroll =
+        scrollerRef.current.scrollWidth > wrapperRef.current.offsetWidth;
       if (newHasRightScroll !== hasRightScroll) {
         setHasRightScroll(newHasRightScroll);
       }
     }
-  }, [activeTab, TABS]);
-
-  const onArrowClick = () => {
-    const scroller = ref.current.querySelector(
-      '.section__panel:not(.section__panel_hidden)',
-    );
-    if (scroller) {
-      scroller.scrollTo({
-        left: scroller.scrollLeft + 400,
-        behavior: 'smooth',
-      });
-    }
-  };
+  }, [activeTab, hasRightScroll]);
 
   return (
     <main className="main">
@@ -171,13 +167,14 @@ function MainContent() {
           </ul>
         </div>
 
-        <div className="section__panel-wrapper" ref={ref}>
+        <div className="section__panel-wrapper" ref={wrapperRef}>
           <div
             role="tabpanel"
             className="section__panel"
             aria-hidden="false"
             id={`panel_${activeTab}`}
             aria-labelledby={`tab_${activeTab}`}
+            ref={scrollerRef}
           >
             <ul className="section__panel-list">
               {TABS[activeTab]?.items.map((item, index) => (

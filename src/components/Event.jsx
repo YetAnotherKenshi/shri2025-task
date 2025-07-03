@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Event(props) {
+const Event = React.memo(function Event(props) {
   const ref = React.useRef();
 
   return (
@@ -18,6 +18,6 @@ function Event(props) {
       </button>
     </li>
   );
-}
+});
 
 export default Event;
